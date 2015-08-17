@@ -21,12 +21,24 @@ class loadingBar(object):
 
 	def __init__(self, totalSteps):
 		self.totalSteps = totalSteps
+		
+		try:
+			self.totalSteps = int(totalSteps)
+		except:
+			raise TypeError("totalSteps must be of type integer")
+		
 		if self.totalSteps < 0:
-			raise RuntimeError("Steps must be positive integers")
+			raise RuntimeError("totalSteps must be positive integers")
+			
 		self.completedSteps = 0
 		self.printPercent(0)
 
 	def printPercent(self, progress):
+		try:
+			progress = float(progress)
+		except:
+			raise TypeError("completedSteps must be integer")
+		
 		if progress == 100:
 			sys.stdout.write("\r[====================>] " + str(progress) + "%\n")
 		elif progress < 100 and progress >= 95:
@@ -67,16 +79,25 @@ class loadingBar(object):
 			sys.stdout.write("\r[==>                  ] " + str(progress) + "%")
 		elif progress < 10 and progress >= 5:
 			sys.stdout.write("\r[=>                   ] " + str(progress) + "%")
-		elif progress < 5:
+		elif progress < 5 and progress >= 0:
 			sys.stdout.write("\r[>                    ] " + str(progress) + "%")
+		else:
+			raise RuntimeError("Unexpected error! Is progress greater than 100 or less than 0?")
 		sys.stdout.flush()
 	
 	def stepComplete(self, completeSteps=1):
-		if completeSteps < 0:
+		try:
+			self.completedSteps = int(completedSteps)
+		except:
+			raise TypeError("completedSteps must be of type integer")
+			
+		if self.completeSteps < 0:
 			raise RuntimeError("Cannot lose progress")
+			
 		self.completedSteps += completeSteps
 		self.progress = (float(self.completedSteps) / float(self.totalSteps)) * 100
 		self.progress = round(self.progress, 2)
+		
 		if self.progress > 100:
 			raise RuntimeError("Cannot exceed 100%")
 		self.printPercent(self.progress)
