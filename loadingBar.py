@@ -87,7 +87,7 @@ class loadingBar(object):
 	
 	def stepComplete(self, completeSteps=1):
 		try:
-			self.completedSteps = int(completedSteps)
+			self.completeSteps = int(completeSteps)
 		except:
 			raise TypeError("completedSteps must be of type integer")
 			
